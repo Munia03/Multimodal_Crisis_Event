@@ -90,9 +90,11 @@ class CrisisMMDataset(BaseDataset):
             #	Generate final_text first from the wiki.py. Check the code of wiki.py and run according to the dataset.
 
             if self.task != 'task3':
-                event_name, tweet_id, image_id, tweet_text,	image,	label,	label_text, label_image, label_text_image, final_text, LLaVA_text, event_category = l.split('\t')
+                    event_name, tweet_id, image_id, tweet_text,	image,	label,	label_text, label_image, label_text_image, final_text, LLaVA_text, event_category, split = l.split('\t')
             else:
-                event_name, tweet_id, image_id, tweet_text,	image,	label,	final_text, LLaVA_text, event_category = l.split('\t')
+                event_name, tweet_id, image_id, tweet_text,	image,	label,	final_text, LLaVA_text, event_category, split = l.split('\t')
+                label_text = label
+                label_image = label
 
             # if self.consistent_only and label_text != label_image:
                 # continue

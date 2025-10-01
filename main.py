@@ -9,11 +9,8 @@ from torch.serialization import save
 from args import get_args
 from trainer import Trainer
 from crisismmd_dataset import CrisisMMDataset
-# from models import DenseNetBertMMModel, ImageOnlyModel, TextOnlyModel
-from models_clipper import CLIPDiffModel, CLIPCAModel, CLIPDiffModel2, CLIPDiffModel3, CLIPDiffCAModel, CLIP_CrisiKAN, ImageOnlyModel, TextOnlyModel
-# from models_llm4gen import CLIPDiffModel, CLIPDiffModel3, CLIPDiffModel_deepseek, CLIPDiffModel_llama, ImageOnlyModel, TextOnlyModel
-from model_vilt import ViLTMMModel
-from model_clip import CLIPMMModel
+from models import DenseNetBertMMModel_crisiskan, ImageOnlyModel, TextOnlyModel
+from models_clip import CLIPDiffModel, CLIP_CrisiKAN
 import os
 import numpy as np
 import torch
@@ -139,9 +136,9 @@ if __name__ == '__main__':
     elif MODE == 'image_only':
         model = ImageOnlyModel(num_class=OUTPUT_SIZE, save_dir=save_dir).to(device)
     elif MODE == 'both':
-        # model = DenseNetBertMMModel(num_class=OUTPUT_SIZE, save_dir=save_dir).to(device)
+        # model = DenseNetBertMMModel_crisiskan(num_class=OUTPUT_SIZE, save_dir=save_dir).to(device)
         model = CLIP_CrisiKAN(num_class=OUTPUT_SIZE, save_dir=save_dir).to(device)
-        # model = CLIPMMModel(num_class=OUTPUT_SIZE, save_dir=save_dir).to(device)
+        # model = CLIPDiffModel(num_class=OUTPUT_SIZE, save_dir=save_dir).to(device)
         
     else:
         raise NotImplemented
@@ -151,15 +148,9 @@ if __name__ == '__main__':
     t_total = math.ceil((len(train_load))/(40)) * 50
 
     optimizer = optim.SGD(model.parameters(), lr=learning_rate)
-    # optimizer = AdamW(model.parameters(), lr=learning_rate, eps=1e-4, weight_decay=1e-2)
 
-    # The authors used factor=0.1, but did not mention other configs.
     scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, factor=0.1, patience=5, cooldown=0, verbose=True)
-    #scheduler = WarmupCosineSchedule(optimizer, warmup_steps=t_total*0.1, t_total=t_total)
-    #scheduler = OneCycleLR(optimizer, total_steps=t_total, max_lr = learning_rate,epochs = 50)
 
-    # optimizer = torch.optim.SGD(model.parameters(), lr=0.001, momentum=0.9, weight_decay=5e-2)
-    # scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, factor=0.5, patience=3, verbose=True)
 
 
     model.to(device)
