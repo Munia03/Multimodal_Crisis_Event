@@ -104,10 +104,10 @@ class CrisisMMDataset(BaseDataset):
                 # LLaVA_text = tweet_text
 
             if self.opt.text_from == 'wiki':
-                caption = tweet_text + final_text
+                caption =  final_text
             
             if self.opt.text_from == 'llava':
-                caption = LLaVA_text
+                caption = tweet_text + LLaVA_text
 
             self.data_list.append(
                 {
